@@ -7,4 +7,7 @@ print(targets)
 
 with open(environ.get('GITHUB_EVENT_PATH')) as f:
     events = json.load(f)
-    pprint(events)
+    action = events['action']
+    label = events['label']['name']
+    print(action)
+    print(label)

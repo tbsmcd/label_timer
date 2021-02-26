@@ -1,0 +1,11 @@
+name: Test
+on:
+  issues:
+    types:
+      ['labeled', 'unlabeled']
+jobs:
+  timer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: test_run
+        uses: tbsmcd/label_timer

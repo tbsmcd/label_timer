@@ -8,4 +8,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: test_run
-        uses: tbsmcd/label_timer
+        uses: tbsmcd/label_timer@master

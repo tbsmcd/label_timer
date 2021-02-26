@@ -11,5 +11,5 @@ jobs:
         uses: tbsmcd/label_timer@master
         with:
           targets:
-          - '対応中'
-          - '依頼中'
+            - label: '対応中'
+            - label: '依頼中'

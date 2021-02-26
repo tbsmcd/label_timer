@@ -11,3 +11,4 @@ with open(environ.get('GITHUB_EVENT_PATH')) as f:
     label = events['label']['name']
     print(action)
     print(label)
+    pprint(events)

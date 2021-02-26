@@ -1,4 +1,4 @@
 from os import environ
 
-targets = environ.get('INPUT_TARGETS')
+targets = [x.strip() for x in environ.get('INPUT_TARGETS')]
 print(targets)

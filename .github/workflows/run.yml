@@ -10,4 +10,6 @@ jobs:
       - name: test_run
         uses: tbsmcd/label_timer@master
         with:
-          targets: ['対応中', '依頼中']
+          targets:
+            - '対応中'
+            - '依頼中'

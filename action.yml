@@ -1,0 +1,5 @@
+name: 'Label timer'
+auther: 'tbsmcd(Tsubasa MOCHIDA)'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'

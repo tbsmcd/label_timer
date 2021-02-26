@@ -5,6 +5,6 @@ runs:
   image: 'Dockerfile'
 inputs:
   targets:
-    description: 'target labels'
+    description: 'Target labels'
     required: true
 

@@ -1,5 +1,10 @@
 name: 'Label timer'
-auther: 'tbsmcd(Tsubasa MOCHIDA)'
+auther: 'Tsubasa MOCHIDA'
 runs:
   using: 'docker'
   image: 'Dockerfile'
+inputs:
+  targets:
+    description: 'target labels'
+    required: true
+

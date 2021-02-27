@@ -3,6 +3,7 @@ import json
 import datetime
 import time
 from pprint import pprint
+import requests
 
 # with open(environ.get('GITHUB_EVENT_PATH')) as f:
 #     events = json.load(f)
@@ -18,18 +19,21 @@ class Label:
         self.events = events
         self.targets = targets
         self.prefix = 'label_timer_' + self.events['label']['name'] + '_'
+        self.headers = {'Authorization': 'token %s' % environ.get('INPUT_TOKEN')}
 
     def is_target(self):
         return self.events['label']['name'] in self.targets
 
     def add_label(self):
         # If a label with a prefix exists, do not add a new label.
-        current_labels = \
-            [x for x in self.events['issue']['labels'] if x['name'].startswith(self.prefix)]
-        if len(current_labels) > 0:
+        current_labels = [x['name'] for x in self.events['issue']['labels']]
+        if len([x for x in current_labels if x.startswith(self.prefix)]) > 0:
             return
         label_to_add = self.prefix + str(int(time.time()))
-        print(label_to_add)
+        api_url = self.events['issue']['url'] + '/labels'
+        payload = {'labels': [label_to_add]}
+        requests.post(api_url, headers=self.headers, data=json.dumps(payload))
+
 
 
 def main():

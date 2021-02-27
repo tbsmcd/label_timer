@@ -26,7 +26,9 @@ class Label:
         api_url = self.events['issue']['url'] + '/labels'
         payload = {'labels': [label_to_add]}
         r = requests.post(api_url, headers=self.headers, data=json.dumps(payload))
-        print(r.status_code)
+        if r.status_code != 200:
+            print('Add label: status_code {}'.format(r.status_code))
+            exit
         return
 
     def remove(self):
@@ -38,6 +40,11 @@ class Label:
         start_time = int(timer_labels[0].replace(self.prefix, ''))
         self.passed_seconds = time.time() - start_time
         # print('::set-output name=PASSED_SECONDS::{}'.format(self.passed_seconds))
+        api_base_url = self.events['issue']['url'] + '/labels/{}'
+        for label in timer_labels:
+            api_url = api_base_url.format(label)
+            r = requests.post(api_url, headers=self.headers)
+            print(r.status_code)
 
     def comment(self):
         pass

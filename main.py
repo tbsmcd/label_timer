@@ -20,20 +20,31 @@ class Label:
         self.targets = targets
         self.prefix = 'label_timer_' + self.events['label']['name'] + '_'
         self.headers = {'Authorization': 'token %s' % environ.get('INPUT_TOKEN')}
+        self.current_labels = [x['name'] for x in self.events['issue']['labels']]
 
     def is_target(self):
         return self.events['label']['name'] in self.targets
 
     def add_label(self):
         # If a label with a prefix exists, do not add a new label.
-        current_labels = [x['name'] for x in self.events['issue']['labels']]
-        if len([x for x in current_labels if x.startswith(self.prefix)]) > 0:
+        if len([x for x in self.current_labels if x.startswith(self.prefix)]) > 0:
             return
         label_to_add = self.prefix + str(int(time.time()))
         api_url = self.events['issue']['url'] + '/labels'
         payload = {'labels': [label_to_add]}
         requests.post(api_url, headers=self.headers, data=json.dumps(payload))
+        return
 
+    def delete_label(self):
+        # List of labels with prefix
+        timer_labels = [x for x in self.current_labels if x.startswith(self.prefix)]
+        if len(timer_labels) == 0:
+            return
+        timer_labels.sort()
+        start_time = int(timer_labels[0].replace(self.prefix))
+        passed_seconds = time.time() - start_time
+        td = datetime.timedelta(seconds=passed_seconds)
+        print(str(td))
 
 
 def main():

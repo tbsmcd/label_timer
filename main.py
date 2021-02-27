@@ -44,7 +44,7 @@ class Label:
         api_base_url = self.events['issue']['url'] + '/labels/{}'
         for label in timer_labels:
             api_url = api_base_url.format(urllib.parse.quote(label))
-            r = requests.post(api_url, headers=self.headers)
+            r = requests.delete(api_url, headers=self.headers)
             print(api_url)
             print(r.status_code)
 

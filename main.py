@@ -44,7 +44,7 @@ class Label:
         for label in timer_labels:
             api_url = api_base_url.format(label)
             r = requests.post(api_url, headers=self.headers)
-            print(label)
+            print(api_url)
             print(r.status_code)
 
     def comment(self):

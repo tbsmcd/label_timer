@@ -72,7 +72,7 @@ def main():
         elif events['action'] == 'unlabeled':
             label.remove()
             print(environ.get('INPUT_COMMENT'))
-            if environ.get('INPUT_COMMENT') is True:
+            if environ.get('INPUT_COMMENT') == 'true':
                 label.comment()
 
 

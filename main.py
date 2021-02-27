@@ -45,11 +45,19 @@ class Label:
         for label in timer_labels:
             api_url = api_base_url.format(urllib.parse.quote(label))
             r = requests.delete(api_url, headers=self.headers)
-            print(api_url)
-            print(r.status_code)
+            print('Remove label {0}: status code {1}'.format(label, r.status_code))
+        return
 
     def comment(self):
-        pass
+        body = 'Label {0} passed time: {1}'.\
+            format(self.events['label']['name'], str(datetime.timedelta(self.passed_seconds)))
+        api_url = self.events['issue']['url'] + '/comments'
+        payload = {'body': body}
+        r = requests.post(api_url, headers=self.headers, data=json.dumps(payload))
+        if r.status_code != 200:
+            print('Add comment: status_code {}'.format(r.status_code))
+            exit
+        return
 
 
 def main():
@@ -63,6 +71,8 @@ def main():
             label.add()
         elif events['action'] == 'unlabeled':
             label.remove()
+            if environ.get('INPUT_COMMENT') is True:
+                label.comment()
 
 
 if __name__ == '__main__':

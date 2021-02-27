@@ -10,4 +10,7 @@ inputs:
   token:
     description: 'Github access token'
     required: true
+  comment:
+    description: 'Add comment?(bool)'
+    default: true
 

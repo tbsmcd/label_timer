@@ -41,7 +41,7 @@ class Label:
         if len(timer_labels) == 0:
             return
         timer_labels.sort()
-        start_time = int(timer_labels[0].replace(self.prefix))
+        start_time = int(timer_labels[0].replace(self.prefix), '')
         passed_seconds = time.time() - start_time
         td = datetime.timedelta(seconds=passed_seconds)
         print(str(td))

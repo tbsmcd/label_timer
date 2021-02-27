@@ -57,7 +57,7 @@ def main():
         if events['action'] == 'labeled':
             label.add_label()
         elif events['action'] == 'unlabeled':
-            pass
+            label.delete_label()
 
 
 if __name__ == '__main__':

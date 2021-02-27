@@ -4,6 +4,7 @@ import datetime
 import time
 from pprint import pprint
 import requests
+import urllib.parse
 
 
 class Label:
@@ -42,7 +43,7 @@ class Label:
         # print('::set-output name=PASSED_SECONDS::{}'.format(self.passed_seconds))
         api_base_url = self.events['issue']['url'] + '/labels/{}'
         for label in timer_labels:
-            api_url = api_base_url.format(label)
+            api_url = api_base_url.format(urllib.parse.quote(label))
             r = requests.post(api_url, headers=self.headers)
             print(api_url)
             print(r.status_code)

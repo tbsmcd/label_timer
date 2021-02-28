@@ -76,7 +76,6 @@ def main():
             print(environ.get('INPUT_COMMENT'))
             if environ.get('INPUT_COMMENT') == 'true':
                 label.comment()
-        elif events['action'] == 'closed':
 
 
 if __name__ == '__main__':

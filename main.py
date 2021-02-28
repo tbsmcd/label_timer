@@ -12,8 +12,8 @@ class Label:
         self.events = events
         self.targets = targets
         # TODO: issue 特有にする
-        self.prefix = 'label_timer_' + self.events['label']['name'] +\
-                      '_' + self.events['issue']['number']
+        self.prefix = 'label_timer_{0}_{1}::'\
+            .format(self.events['label']['name'], self.events['issue']['number'])
         self.headers = {'Authorization': 'token %s' % environ.get('INPUT_TOKEN')}
         self.current_labels = [x['name'] for x in self.events['issue']['labels']]
         self.passed_seconds = 0

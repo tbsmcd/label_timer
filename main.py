@@ -1,4 +1,5 @@
 from os import environ
+import re
 import json
 import datetime
 import time
@@ -8,12 +9,10 @@ import urllib.parse
 
 
 class Label:
-    def __init__(self, events, targets):
+    def __init__(self, events: dict, targets: list):
         self.events = events
         self.targets = targets
-        # TODO: issue 特有にする
-        self.prefix = 'label_timer_{0}_{1}::'\
-            .format(self.events['label']['name'], self.events['issue']['number'])
+        self.prefix = 'label_timer_{0}_{1}::'.format(self.events['label']['name'], self.events['issue']['number'])
         self.headers = {'Authorization': 'token %s' % environ.get('INPUT_TOKEN')}
         self.current_labels = [x['name'] for x in self.events['issue']['labels']]
         self.passed_seconds = 0
@@ -42,13 +41,9 @@ class Label:
         timer_labels.sort()
         start_time = int(timer_labels[0].replace(self.prefix, ''))
         self.passed_seconds = time.time() - start_time
+        # TODO: output に情報をもたせる
         # print('::set-output name=PASSED_SECONDS::{}'.format(self.passed_seconds))
-        api_base_url = self.events['issue']['url'] + '/labels/{}'
         for label in timer_labels:
-            # api_url = api_base_url.format(urllib.parse.quote(label))
-            # r = requests.delete(api_url, headers=self.headers)
-            # print('Remove label {0}: status code {1}'.format(label, r.status_code))
-            # TODO: API からラベルを消去
             api_url = self.events['repository']['labels_url']\
                 .replace('{/name}', '/' + urllib.parse.quote(label))
             r = requests.delete(api_url, headers=self.headers)
@@ -56,8 +51,8 @@ class Label:
         return
 
     def comment(self):
-        body = 'Label {0} passed time: {1}'.\
-            format(self.events['label']['name'], str(datetime.timedelta(seconds=self.passed_seconds)))
+        delta = re.sub(r'\.[0-9]*$', '', str(datetime.timedelta(seconds=self.passed_seconds)))
+        body = 'Label {0} passed time: {1}'.format(self.events['label']['name'], delta)
         api_url = self.events['issue']['url'] + '/comments'
         payload = {'body': body}
         r = requests.post(api_url, headers=self.headers, data=json.dumps(payload))
@@ -65,10 +60,6 @@ class Label:
             print('Add comment: status_code {}'.format(r.status_code))
             exit
         return
-
-    def delete(self):
-        # TODO: API からラベル一覧を取得して消去
-        pass
 
 
 def main():
@@ -85,6 +76,7 @@ def main():
             print(environ.get('INPUT_COMMENT'))
             if environ.get('INPUT_COMMENT') == 'true':
                 label.comment()
+        elif events['action'] == 'closed':
 
 
 if __name__ == '__main__':

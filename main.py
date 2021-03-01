@@ -41,14 +41,15 @@ class Label:
         timer_labels.sort()
         start_time = int(timer_labels[0].replace(self.prefix, ''))
         self.passed_seconds = time.time() - start_time
-        # TODO: output に情報をもたせる
-        # print('::set-output name=PASSED_SECONDS::{}'.format(self.passed_seconds))
         for label in timer_labels:
             api_url = self.events['repository']['labels_url']\
                 .replace('{/name}', '/' + urllib.parse.quote(label))
             r = requests.delete(api_url, headers=self.headers)
             print('Remove label {0}: status code {1}'.format(label, r.status_code))
         return
+
+    def get_passed_seconds(self):
+        return self.passed_seconds
 
     def comment(self):
         delta = re.sub(r'\.[0-9]*$', '', str(datetime.timedelta(seconds=self.passed_seconds)))
@@ -67,15 +68,20 @@ def main():
     with open(environ.get('GITHUB_EVENT_PATH')) as f:
         events = json.load(f)
         label = Label(events, targets)
+        outputs = {
+            'action': events['action'],
+            'label': events['label']['name']
+        }
         if label.is_target() is False:
             return
         if events['action'] == 'labeled':
             label.add()
         elif events['action'] == 'unlabeled':
             label.remove()
-            print(environ.get('INPUT_COMMENT'))
             if environ.get('INPUT_COMMENT') == 'true':
                 label.comment()
+            outputs['passed_seconds'] = label.get_passed_seconds()
+        print('::set-output name=LABEL_TIMER_RESULT::{}'.format(json.dumps(outputs)))
 
 
 if __name__ == '__main__':

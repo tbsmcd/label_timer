@@ -9,16 +9,12 @@ import urllib.parse
 
 
 class Label:
-    def __init__(self, events: dict, targets: list):
+    def __init__(self, events: dict):
         self.events = events
-        self.targets = targets
         self.prefix = 'label_timer_{0}_{1}::'.format(self.events['label']['name'], self.events['issue']['number'])
         self.headers = {'Authorization': 'token %s' % environ.get('INPUT_TOKEN')}
         self.current_labels = [x['name'] for x in self.events['issue']['labels']]
         self.passed_seconds = 0
-
-    def is_target(self):
-        return self.events['label']['name'] in self.targets
 
     def add(self):
         # If a label with a prefix exists, do not add a new label.
@@ -53,7 +49,8 @@ class Label:
 
     def comment(self):
         delta = re.sub(r'\.[0-9]*$', '', str(datetime.timedelta(seconds=self.passed_seconds)))
-        body = 'Label {0} passed time: {1}'.format(self.events['label']['name'], delta)
+        body = 'Label {0} passed time: {1}\n(seconds: {2})'.\
+            format(self.events['label']['name'], delta, self.passed_seconds)
         api_url = self.events['issue']['url'] + '/comments'
         payload = {'body': body}
         r = requests.post(api_url, headers=self.headers, data=json.dumps(payload))
@@ -72,7 +69,7 @@ def main():
             'action': events['action'],
             'label': events['label']['name']
         }
-        if label.is_target() is False:
+        if events['label']['name'] not in targets:
             return
         if events['action'] == 'labeled':
             label.add()

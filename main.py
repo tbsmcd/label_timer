@@ -48,6 +48,7 @@ class Label:
         return self.passed_seconds
 
     def comment(self):
+
         delta = re.sub(r'\.[0-9]*$', '', str(datetime.timedelta(seconds=self.passed_seconds)))
         body = 'Label {0} passed time: {1}\n(seconds: {2})'.\
             format(self.events['label']['name'], delta, int(self.passed_seconds))

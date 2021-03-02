@@ -64,7 +64,7 @@ def main():
     targets = [x.strip() for x in environ.get('INPUT_TARGETS').split(',')]
     with open(environ.get('GITHUB_EVENT_PATH')) as f:
         events = json.load(f)
-        label = Label(events, targets)
+        label = Label(events)
         outputs = {
             'action': events['action'],
             'label': events['label']['name']

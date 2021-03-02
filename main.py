@@ -50,7 +50,7 @@ class Label:
     def comment(self):
         delta = re.sub(r'\.[0-9]*$', '', str(datetime.timedelta(seconds=self.passed_seconds)))
         body = 'Label {0} passed time: {1}\n(seconds: {2})'.\
-            format(self.events['label']['name'], delta, self.passed_seconds)
+            format(self.events['label']['name'], delta, int(self.passed_seconds))
         api_url = self.events['issue']['url'] + '/comments'
         payload = {'body': body}
         r = requests.post(api_url, headers=self.headers, data=json.dumps(payload))

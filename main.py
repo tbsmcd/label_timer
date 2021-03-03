@@ -53,7 +53,10 @@ class Label:
         body = 'Label {0} passed time: {1}\n(seconds: {2})'.\
             format(self.events['label']['name'], delta, int(self.passed_seconds))
         api_url = self.events['issue']['url'] + '/comments'
-        payload = {'body': body}
+        payload = {
+            'body': body,
+            'owner': 'label_timer'
+        }
         r = requests.post(api_url, headers=self.headers, data=json.dumps(payload))
         if r.status_code != 200:
             print('Add comment: status_code {}'.format(r.status_code))

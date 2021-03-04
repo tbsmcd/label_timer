@@ -48,22 +48,26 @@ class Label:
         return self.passed_seconds
 
     def comment(self):
-        self.__sum_times()
+        before_passed_seconds = self.__sum_passed_seconds()
         delta = re.sub(r'\.[0-9]*$', '', str(datetime.timedelta(seconds=self.passed_seconds)))
         body = 'Label {0} passed time: {1}\n(seconds: {2})'.\
             format(self.events['label']['name'], delta, int(self.passed_seconds))
         api_url = self.events['issue']['url'] + '/comments'
-        payload = {
-            'body': body,
-            'owner': 'label_timer'
-        }
+        payload = {'body': body}
         r = requests.post(api_url, headers=self.headers, data=json.dumps(payload))
         if r.status_code != 200:
             print('Add comment: status_code {}'.format(r.status_code))
             exit
+        delta = re.sub(r'\.[0-9]*$', '', str(datetime.timedelta(seconds=before_passed_seconds)))
+        body = 'Total {0} passed time: {1}'.format(self.events['label']['name'], delta)
+        payload = {'body': body}
+        r = requests.post(api_url, headers=self.headers, data=json.dumps(payload))
+        if r.status_code != 200:
+            print('Add comment(total time): status_code {}'.format(r.status_code))
+            exit
         return
 
-    def __sum_times(self):
+    def __sum_passed_seconds(self):
         sum_seconds = 0
         reg = re.compile(r'Label {} passed time: .+\n\(seconds: ([0-9]+)\)'.format(self.events['label']['name']))
         api_base_url = self.events['issue']['comments_url']
@@ -77,7 +81,8 @@ class Label:
             if r.status_code == 200:
                 for comment in r.json():
                     if comment['user']['login'] == 'github-actions[bot]' and reg.match(comment['body']):
-                        print(reg.match(comment['body']).group(1))
+                        sum_seconds += int(reg.match(comment['body']).group(1))
+        return sum_seconds
 
 
 def main():

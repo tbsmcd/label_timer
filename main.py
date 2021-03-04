@@ -58,13 +58,11 @@ class Label:
         if r.status_code != 200:
             print('Add comment: status_code {}'.format(r.status_code))
             exit
-        delta = re.sub(r'\.[0-9]*$', '', str(datetime.timedelta(seconds=before_passed_seconds)))
+        delta = re.sub(r'\.[0-9]*$', '', str(datetime.timedelta(seconds=before_passed_seconds + self.passed_seconds)))
         body = 'Total {0} passed time: {1}'.format(self.events['label']['name'], delta)
         payload = {'body': body}
         r = requests.post(api_url, headers=self.headers, data=json.dumps(payload))
-        if r.status_code != 200:
-            print('Add comment(total time): status_code {}'.format(r.status_code))
-            exit
+        print('Add comment(total time): status_code {}'.format(r.status_code))
         return
 
     def __sum_passed_seconds(self):

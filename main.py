@@ -65,7 +65,7 @@ class Label:
 
     def __sum_times(self):
         sum_seconds = 0
-        reg = re.compile(r'Label {} passed time: .+\n\(seconds: ([0-9]+)\)')
+        reg = re.compile(r'Label {} passed time: .+\n\(seconds: ([0-9]+)\)'.format(self.events['label']['name']))
         api_base_url = self.events['issue']['comments_url']
         for i in range(int(self.events['issue']['comments']/100) + 1):
             page = i + 1

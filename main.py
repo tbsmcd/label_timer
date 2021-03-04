@@ -76,7 +76,6 @@ class Label:
             api_url = api_base_url + '?per_page=100&page={}'.format(page)
             print(api_url)
             r = requests.get(api_url, headers=self.headers)
-            # pprint(r.json())
             print('Get comments list, URL:{0} status_code{1}'.format(api_url, r.status_code))
             if r.status_code == 200:
                 for comment in r.json():

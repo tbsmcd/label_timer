@@ -50,7 +50,8 @@ class Label:
     def comment(self):
         before_passed_seconds = self.__sum_passed_seconds()
         delta = re.sub(r'\.[0-9]*$', '', str(datetime.timedelta(seconds=self.passed_seconds)))
-        total_delta = re.sub(r'\.[0-9]*$', '', str(datetime.timedelta(seconds=before_passed_seconds)))
+        total_delta = re.sub(r'\.[0-9]*$', '',
+                             str(datetime.timedelta(seconds=before_passed_seconds + self.passed_seconds)))
         body = 'Label {0} passed time: {1}\n(seconds: {2})\nTotal time: {3}'.\
             format(self.events['label']['name'], delta, int(self.passed_seconds), total_delta)
         api_url = self.events['issue']['url'] + '/comments'

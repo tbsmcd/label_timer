@@ -67,7 +67,7 @@ class Label:
     def __sum_times(self):
         api_base_url = self.events['issue']['comments_url']
         for i in range(int(self.events['issue']['comments']/100) + 1):
-            page = 1 + 1
+            page = i + 1
             api_url = api_base_url + '?per_page=100&page={}'.format(page)
             print(api_url)
             r = requests.get(api_url, headers=self.headers)

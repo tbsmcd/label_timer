@@ -11,7 +11,6 @@ import urllib.parse
 class Label:
     def __init__(self, events: dict):
         self.events = events
-        pprint(events)
         self.prefix = 'label_timer_{0}_{1}::'.format(self.events['label']['name'], self.events['issue']['number'])
         self.headers = {'Authorization': 'token %s' % environ.get('INPUT_TOKEN')}
         self.current_labels = [x['name'] for x in self.events['issue']['labels']]
@@ -65,13 +64,20 @@ class Label:
         return
 
     def __sum_times(self):
+        sum_seconds = 0
+        reg = re.compile(r'Label {} passed time: .+\n\(seconds: ([0-9]+)\)')
         api_base_url = self.events['issue']['comments_url']
         for i in range(int(self.events['issue']['comments']/100) + 1):
             page = i + 1
             api_url = api_base_url + '?per_page=100&page={}'.format(page)
             print(api_url)
             r = requests.get(api_url, headers=self.headers)
-            pprint(r.json())
+            # pprint(r.json())
+            print('Get comments list, URL:{0} status_code{1}'.format(api_url, r.status_code))
+            if r.status_code == 200:
+                for comment in r.json():
+                    if comment['user']['login'] == 'github-actions[bot]' and reg.match(comment['body']):
+                        print(reg.match(comment['body']).group(1))
 
 
 def main():

@@ -49,7 +49,7 @@ class Label:
         return self.passed_seconds
 
     def comment(self):
-
+        self.__sum_times()
         delta = re.sub(r'\.[0-9]*$', '', str(datetime.timedelta(seconds=self.passed_seconds)))
         body = 'Label {0} passed time: {1}\n(seconds: {2})'.\
             format(self.events['label']['name'], delta, int(self.passed_seconds))
@@ -63,6 +63,14 @@ class Label:
             print('Add comment: status_code {}'.format(r.status_code))
             exit
         return
+
+    def __sum_times(self):
+        api_base_url = self.events['issue']['comments_url']
+        for i in range(int(self.events['issue']['comments']/100)):
+            page = 1 + 1
+            api_url = api_base_url + '?per_page=100&page={}'.format(page)
+            r = requests.get(api_url, headers=self.headers)
+            pprint(r)
 
 
 def main():

@@ -69,6 +69,7 @@ class Label:
         for i in range(int(self.events['issue']['comments']/100) + 1):
             page = 1 + 1
             api_url = api_base_url + '?per_page=100&page={}'.format(page)
+            print(api_url)
             r = requests.get(api_url, headers=self.headers)
             pprint(json.dumps(r.json()))
 

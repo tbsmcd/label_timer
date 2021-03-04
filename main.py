@@ -50,19 +50,17 @@ class Label:
     def comment(self):
         before_passed_seconds = self.__sum_passed_seconds()
         delta = re.sub(r'\.[0-9]*$', '', str(datetime.timedelta(seconds=self.passed_seconds)))
-        body = 'Label {0} passed time: {1}\n(seconds: {2})'.\
-            format(self.events['label']['name'], delta, int(self.passed_seconds))
+        body = 'Label {0} passed time: {1}\n(seconds: {2})\nTotal time: {3}'.\
+            format(self.events['label']['name'],
+                   delta,
+                   int(self.passed_seconds),
+                   datetime.timedelta(seconds=before_passed_seconds + self.passed_seconds))
         api_url = self.events['issue']['url'] + '/comments'
         payload = {'body': body}
         r = requests.post(api_url, headers=self.headers, data=json.dumps(payload))
         if r.status_code != 200:
             print('Add comment: status_code {}'.format(r.status_code))
             exit
-        delta = re.sub(r'\.[0-9]*$', '', str(datetime.timedelta(seconds=before_passed_seconds + self.passed_seconds)))
-        body = 'Total {0} passed time: {1}'.format(self.events['label']['name'], delta)
-        payload = {'body': body}
-        r = requests.post(api_url, headers=self.headers, data=json.dumps(payload))
-        print('Add comment(total time): status_code {}'.format(r.status_code))
         return
 
     def __sum_passed_seconds(self):

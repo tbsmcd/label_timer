@@ -70,7 +70,7 @@ class Label:
             page = 1 + 1
             api_url = api_base_url + '?per_page=100&page={}'.format(page)
             r = requests.get(api_url, headers=self.headers)
-            pprint(r)
+            pprint(json.dumps(r.json()))
 
 
 def main():

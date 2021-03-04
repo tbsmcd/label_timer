@@ -11,6 +11,7 @@ import urllib.parse
 class Label:
     def __init__(self, events: dict):
         self.events = events
+        pprint(events)
         self.prefix = 'label_timer_{0}_{1}::'.format(self.events['label']['name'], self.events['issue']['number'])
         self.headers = {'Authorization': 'token %s' % environ.get('INPUT_TOKEN')}
         self.current_labels = [x['name'] for x in self.events['issue']['labels']]

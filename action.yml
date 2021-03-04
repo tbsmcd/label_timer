@@ -2,7 +2,7 @@ name: 'Label timer'
 auther: 'Tsubasa MOCHIDA'
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/tbsmcd/label_timer/labeler:v1.5'
+  image: 'docker://ghcr.io/tbsmcd/label_timer/labeler:v1.6'
 inputs:
   targets:
     description: 'Target labels, comma-separated.'

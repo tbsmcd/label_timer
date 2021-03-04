@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: test_run
-        uses: tbsmcd/label_timer@master
+        uses: tbsmcd/label_timer@dev
         with:
           targets: '対応中, 依頼中'
           token: ${{ secrets.GITHUB_TOKEN }}

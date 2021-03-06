@@ -15,6 +15,7 @@ class Label:
         self.headers = {'Authorization': 'token %s' % environ.get('INPUT_TOKEN')}
         self.current_labels = [x['name'] for x in self.events['issue']['labels']]
         self.passed_seconds = 0
+        self.before_passed_seconds = 0
 
     def add(self):
         # If a label with a prefix exists, do not add a new label.
@@ -44,14 +45,11 @@ class Label:
             print('Remove label {0}: status code {1}'.format(label, r.status_code))
         return
 
-    def get_passed_seconds(self):
-        return self.passed_seconds
-
     def comment(self):
-        before_passed_seconds = self.__sum_passed_seconds()
+        self.__set_before_passed_seconds()
         delta = re.sub(r'\.[0-9]*$', '', str(datetime.timedelta(seconds=self.passed_seconds)))
         total_delta = re.sub(r'\.[0-9]*$', '',
-                             str(datetime.timedelta(seconds=before_passed_seconds + self.passed_seconds)))
+                             str(datetime.timedelta(seconds=self.before_passed_seconds + self.passed_seconds)))
         body = 'Label {0} passed time: {1}\n(seconds: {2})\nTotal time: {3}'.\
             format(self.events['label']['name'], delta, int(self.passed_seconds), total_delta)
         api_url = self.events['issue']['url'] + '/comments'
@@ -62,7 +60,17 @@ class Label:
             exit
         return
 
-    def __sum_passed_seconds(self):
+    def get_outputs(self):
+        outputs = {
+            'action': self.events['action'],
+            'label': self.events['label']['name']
+        }
+        if outputs['action'] == 'labeled':
+            outputs['passed_seconds'] = self.passed_seconds
+            outputs['sum_seconds'] = self.passed_seconds + self.before_passed_seconds
+        return outputs
+
+    def __set_before_passed_seconds(self):
         sum_seconds = 0
         reg = re.compile(r'Label {} passed time: .+\n\(seconds: ([0-9]+)\)'.format(self.events['label']['name']))
         api_base_url = self.events['issue']['comments_url']
@@ -76,7 +84,8 @@ class Label:
                 for comment in r.json():
                     if comment['user']['login'] == 'github-actions[bot]' and reg.match(comment['body']):
                         sum_seconds += int(reg.match(comment['body']).group(1))
-        return sum_seconds
+        self.before_passed_seconds = sum_seconds
+        return
 
 
 def main():
@@ -84,10 +93,6 @@ def main():
     with open(environ.get('GITHUB_EVENT_PATH')) as f:
         events = json.load(f)
         label = Label(events)
-        outputs = {
-            'action': events['action'],
-            'label': events['label']['name']
-        }
         if events['label']['name'] not in targets:
             return
         if events['action'] == 'labeled':
@@ -96,8 +101,7 @@ def main():
             label.remove()
             if environ.get('INPUT_COMMENT') == 'true':
                 label.comment()
-            outputs['passed_seconds'] = label.get_passed_seconds()
-        print('::set-output name=LABEL_TIMER_RESULT::{}'.format(json.dumps(outputs)))
+        print('::set-output name=LABEL_TIMER_RESULTS::{}'.format(json.dumps(label.get_outputs())))
 
 
 if __name__ == '__main__':

@@ -27,7 +27,6 @@ class Label:
         r = requests.post(api_url, headers=self.headers, data=json.dumps(payload))
         if r.status_code != 200:
             print('Add label: status_code {}'.format(r.status_code))
-            exit
         return
 
     def remove(self):
@@ -55,9 +54,7 @@ class Label:
         api_url = self.events['issue']['url'] + '/comments'
         payload = {'body': body}
         r = requests.post(api_url, headers=self.headers, data=json.dumps(payload))
-        if r.status_code != 200:
-            print('Add comment: status_code {}'.format(r.status_code))
-            exit
+        print('Add comment: status_code {}'.format(r.status_code))
         return
 
     def get_outputs(self):
@@ -101,6 +98,7 @@ def main():
             label.remove()
             if environ.get('INPUT_COMMENT') == 'true':
                 label.comment()
+        print('results::{}'.format(json.dumps(label.get_outputs())))
         print('::set-output name=results::{}'.format(json.dumps(label.get_outputs())))
 
 

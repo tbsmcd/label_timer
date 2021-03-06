@@ -2,7 +2,7 @@ name: 'Label timer'
 auther: 'Tsubasa MOCHIDA'
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/tbsmcd/label_timer/labeler:v1.8'
+  image: 'docker://ghcr.io/tbsmcd/label_timer/labeler:v1.9'
 inputs:
   targets:
     description: 'Target labels, comma-separated.'
@@ -16,3 +16,6 @@ inputs:
   sum_time:
     description: 'Calculate the total time?'
     default: true
+outputs:
+  results:
+    description: 'Execution result(json)'

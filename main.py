@@ -101,9 +101,7 @@ def main():
             label.remove()
             if environ.get('INPUT_COMMENT') == 'true':
                 label.comment()
-        print("::set-output name=results::hoge")
-        print("{}".format(json.dumps(label.get_outputs())))
-        # print("::set-output name=results::{}".format(json.dumps(label.get_outputs())))
+        print("::set-output name=results::{}".format(json.dumps(label.get_outputs())))
 
 
 if __name__ == '__main__':

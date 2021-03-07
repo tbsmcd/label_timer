@@ -3,8 +3,8 @@ auther: 'Tsubasa MOCHIDA'
 description: 'It measures the amount of time an issue has had a specific label.'
 runs:
   using: 'docker'
-  image: "Dockerfile"
-#  image: 'docker://ghcr.io/tbsmcd/label_timer/labeler:v1.9'
+#  image: "Dockerfile"
+  image: 'docker://ghcr.io/tbsmcd/label_timer/labeler:v1.10'
 inputs:
   targets:
     description: 'Target labels, comma-separated.'

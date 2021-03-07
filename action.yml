@@ -16,5 +16,5 @@ inputs:
     description: 'Add comment?(bool)'
     default: true
 outputs:
-  action:
+  results:
     description: 'Execution result(json)'

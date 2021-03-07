@@ -61,15 +61,14 @@ class Label:
         return
 
     def get_outputs(self):
-        # outputs = {
-        #     'action': self.events['action'],
-        #     'label': self.events['label']['name']
-        # }
-        # if outputs['action'] == 'labeled':
-        #     outputs['passed_seconds'] = self.passed_seconds
-        #     outputs['sum_seconds'] = self.passed_seconds + self.before_passed_seconds
-        # return outputs
-        print('::set-output name=action::{}'.format(self.events['action']))
+        outputs = {
+            'action': self.events['action'],
+            'label': self.events['label']['name']
+        }
+        if outputs['action'] == 'labeled':
+            outputs['passed_seconds'] = self.passed_seconds
+            outputs['sum_seconds'] = self.passed_seconds + self.before_passed_seconds
+        return outputs
 
     def __set_before_passed_seconds(self):
         sum_seconds = 0
@@ -102,7 +101,7 @@ def main():
             label.remove()
             if environ.get('INPUT_COMMENT') == 'true':
                 label.comment()
-        # print('::set-output name=results::{}'.format(json.dumps(label.get_outputs())))
+        print('::set-output name=results::{}'.format(json.dumps(label.get_outputs())))
 
 
 if __name__ == '__main__':

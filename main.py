@@ -101,7 +101,6 @@ def main():
             label.remove()
             if environ.get('INPUT_COMMENT') == 'true':
                 label.comment()
-        print('results::{}'.format(json.dumps(label.get_outputs())))
         print('::set-output name=results::{}'.format(json.dumps(label.get_outputs())))
 
 

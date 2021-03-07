@@ -1,5 +1,6 @@
 name: 'Label timer'
 auther: 'Tsubasa MOCHIDA'
+description: 'It measures the amount of time an issue has had a specific label.'
 runs:
   using: 'docker'
   image: "Dockerfile"
@@ -13,9 +14,6 @@ inputs:
     required: true
   comment:
     description: 'Add comment?(bool)'
-    default: true
-  sum_time:
-    description: 'Calculate the total time?'
     default: true
 outputs:
   results:

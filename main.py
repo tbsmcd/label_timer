@@ -26,8 +26,7 @@ class Label:
         payload = {'labels': [label_to_add]}
         r = requests.post(api_url, headers=self.headers, data=json.dumps(payload))
         if r.status_code != 200:
-            print('Add label: status_code {}'.format(r.status_code))
-            exit
+            print('Add label: status code {}'.format(r.status_code))
         return
 
     def remove(self):
@@ -56,19 +55,16 @@ class Label:
         payload = {'body': body}
         r = requests.post(api_url, headers=self.headers, data=json.dumps(payload))
         if r.status_code != 200:
-            print('Add comment: status_code {}'.format(r.status_code))
-            exit
+            print('Add comment: status code {}'.format(r.status_code))
         return
 
-    def get_outputs(self):
-        outputs = {
-            'action': self.events['action'],
-            'label': self.events['label']['name']
-        }
-        if outputs['action'] == 'labeled':
-            outputs['passed_seconds'] = self.passed_seconds
-            outputs['sum_seconds'] = self.passed_seconds + self.before_passed_seconds
-        return outputs
+    def set_outputs(self):
+        print("::set-output name=action::{}".format(self.events['action']))
+        print("::set-output name=label::{}".format(self.events['label']['name']))
+        if self.events['action'] == 'labeled':
+            print("::set-output name=passed_seconds::{}".format(self.passed_seconds))
+            print("::set-output name=sum_seconds::{}".format(self.passed_seconds + self.before_passed_seconds))
+        return
 
     def __set_before_passed_seconds(self):
         sum_seconds = 0
@@ -79,7 +75,7 @@ class Label:
             api_url = api_base_url + '?per_page=100&page={}'.format(page)
             print(api_url)
             r = requests.get(api_url, headers=self.headers)
-            print('Get comments list, URL:{0} status_code{1}'.format(api_url, r.status_code))
+            print('Get comments list, URL:{0} status code{1}'.format(api_url, r.status_code))
             if r.status_code == 200:
                 for comment in r.json():
                     if comment['user']['login'] == 'github-actions[bot]' and reg.match(comment['body']):
@@ -101,7 +97,7 @@ def main():
             label.remove()
             if environ.get('INPUT_COMMENT') == 'true':
                 label.comment()
-        print("::set-output name=results::{}".format(json.dumps(label.get_outputs())))
+        label.set_outputs()
 
 
 if __name__ == '__main__':

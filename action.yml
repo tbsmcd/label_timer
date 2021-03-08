@@ -1,5 +1,5 @@
 name: 'Label timer'
-auther: 'Tsubasa MOCHIDA'
+author: 'Tsubasa MOCHIDA'
 description: 'It measures the amount of time an issue has had a specific label.'
 runs:
   using: 'docker'
@@ -16,5 +16,11 @@ inputs:
     description: 'Add comment?(bool)'
     default: true
 outputs:
-  results:
-    description: 'Execution result(json)'
+  action:
+    description: 'Triggered action'
+  label:
+    description: 'Target label'
+  passed_seconds:
+    description: 'Passed seconds'
+  sum_seconds:
+    description: 'Passed seconds(total)'

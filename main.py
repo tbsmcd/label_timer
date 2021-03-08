@@ -61,7 +61,7 @@ class Label:
     def set_outputs(self):
         print("::set-output name=action::{}".format(self.events['action']))
         print("::set-output name=label::{}".format(self.events['label']['name']))
-        if self.events['action'] == 'labeled':
+        if self.events['action'] == 'unlabeled':
             print("::set-output name=passed_seconds::{}".format(self.passed_seconds))
             print("::set-output name=sum_seconds::{}".format(self.passed_seconds + self.before_passed_seconds))
         return

@@ -4,7 +4,7 @@ description: 'It measures the amount of time an issue has had a specific label.'
 runs:
   using: 'docker'
 #  image: "Dockerfile"
-  image: 'docker://ghcr.io/tbsmcd/label_timer/labeler:v1.11'
+  image: 'docker://ghcr.io/tbsmcd/label_timer/labeler:v1.12'
 inputs:
   targets:
     description: 'Target labels, comma-separated.'

@@ -64,6 +64,8 @@ class Label:
             api_url = self.events[self.target]['url'] + '/comments'
         payload = {'body': body}
         r = requests.post(api_url, headers=self.headers, data=json.dumps(payload))
+        print(body)
+        print(api_url)
         if r.status_code != 200:
             print('Add comment: status code {}'.format(r.status_code))
         return

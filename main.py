@@ -11,9 +11,15 @@ import urllib.parse
 class Label:
     def __init__(self, events: dict):
         self.events = events
-        self.prefix = 'label_timer_{0}_{1}::'.format(self.events['label']['name'], self.events['issue']['number'])
+        if 'pull_request' in events:
+            self.target = 'pull_request'
+            self.prefix = 'label_timer_{0}_PR{1}::'.format(self.events['label']['name'], self.events['pull_request']['number'])
+        else:
+            self.target = 'issue'
+            self.prefix = 'label_timer_{0}_{1}::'.format(self.events['label']['name'], self.events['issue']['number'])
+
         self.headers = {'Authorization': 'token %s' % environ.get('INPUT_TOKEN')}
-        self.current_labels = [x['name'] for x in self.events['issue']['labels']]
+        self.current_labels = [x['name'] for x in self.events[self.target]['labels']]
         self.passed_seconds = 0
         self.before_passed_seconds = 0
 
@@ -22,7 +28,7 @@ class Label:
         if len([x for x in self.current_labels if x.startswith(self.prefix)]) > 0:
             return
         label_to_add = self.prefix + str(int(time.time()))
-        api_url = self.events['issue']['url'] + '/labels'
+        api_url = self.events[self.target]['url'] + '/labels'
         payload = {'labels': [label_to_add]}
         r = requests.post(api_url, headers=self.headers, data=json.dumps(payload))
         if r.status_code != 200:
@@ -51,7 +57,7 @@ class Label:
                              str(datetime.timedelta(seconds=self.before_passed_seconds + self.passed_seconds)))
         body = 'Label {0} passed time: {1}\n(seconds: {2})\nTotal time: {3}'.\
             format(self.events['label']['name'], delta, int(self.passed_seconds), total_delta)
-        api_url = self.events['issue']['url'] + '/comments'
+        api_url = self.events[self.target]['url'] + '/comments'
         payload = {'body': body}
         r = requests.post(api_url, headers=self.headers, data=json.dumps(payload))
         if r.status_code != 200:
@@ -69,8 +75,13 @@ class Label:
     def __set_before_passed_seconds(self):
         sum_seconds = 0
         reg = re.compile(r'Label {} passed time: .+\n\(seconds: ([0-9]+)\)'.format(self.events['label']['name']))
-        api_base_url = self.events['issue']['comments_url']
-        for i in range(int(self.events['issue']['comments']/100) + 1):
+        if self.target == 'pull_request':
+            api_base_url = self.events[self.target]['review_comments_url']
+            comments = self.events[self.target]['review_comments']
+        else:
+            api_base_url = self.events[self.target]['comments_url']
+            comments = self.events[self.target]['comments']
+        for i in range(int(comments/100) + 1):
             page = i + 1
             api_url = api_base_url + '?per_page=100&page={}'.format(page)
             print(api_url)

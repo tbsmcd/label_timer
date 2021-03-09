@@ -59,7 +59,7 @@ class Label:
         body = 'Label {0} passed time: {1}\n(seconds: {2})\nTotal time: {3}'.\
             format(self.events['label']['name'], delta, int(self.passed_seconds), total_delta)
         if self.target == 'pull_request':
-            api_url = self.events[self.target]['review_comments_url']
+            api_url = self.events['pull_request']['_links']['comments']['url']
         else:
             api_url = self.events[self.target]['url'] + '/comments'
         payload = {'body': body}

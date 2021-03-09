@@ -1,6 +1,9 @@
 name: 'Label timer'
 author: 'Tsubasa MOCHIDA'
 description: 'It measures the amount of time an issue has had a specific label.'
+branding:
+  icon: 'bell'
+  color: 'green'
 runs:
   using: 'docker'
 #  image: "Dockerfile"

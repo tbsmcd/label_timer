@@ -88,6 +88,7 @@ def main():
     targets = [x.strip() for x in environ.get('INPUT_TARGETS').split(',')]
     with open(environ.get('GITHUB_EVENT_PATH')) as f:
         events = json.load(f)
+        pprint(events)
         label = Label(events)
         if events['label']['name'] not in targets:
             return

@@ -68,6 +68,7 @@ class Label:
         print(api_url)
         if r.status_code != 200:
             print('Add comment: status code {}'.format(r.status_code))
+            print(r.json())
         return
 
     def set_outputs(self):

@@ -13,11 +13,9 @@ class Label:
         self.events = events
         if 'pull_request' in events:
             self.target = 'pull_request'
-            self.prefix = 'label_timer_{0}_PR{1}::'.format(self.events['label']['name'], self.events['pull_request']['number'])
         else:
             self.target = 'issue'
-            self.prefix = 'label_timer_{0}_{1}::'.format(self.events['label']['name'], self.events['issue']['number'])
-
+        self.prefix = 'label_timer_{0}_{1}::'.format(self.events['label']['name'], self.events[self.target]['number'])
         self.headers = {'Authorization': 'token %s' % environ.get('INPUT_TOKEN')}
         self.current_labels = [x['name'] for x in self.events[self.target]['labels']]
         self.passed_seconds = 0
@@ -28,7 +26,10 @@ class Label:
         if len([x for x in self.current_labels if x.startswith(self.prefix)]) > 0:
             return
         label_to_add = self.prefix + str(int(time.time()))
-        api_url = self.events[self.target]['url'] + '/labels'
+        if self.target == 'pull_request':
+            api_url = self.events['pull_request']['_links']['issue']['href'] + '/labels'
+        else:
+            api_url = self.events[self.target]['url'] + '/labels'
         payload = {'labels': [label_to_add]}
         r = requests.post(api_url, headers=self.headers, data=json.dumps(payload))
         if r.status_code != 200:

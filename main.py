@@ -57,7 +57,10 @@ class Label:
                              str(datetime.timedelta(seconds=self.before_passed_seconds + self.passed_seconds)))
         body = 'Label {0} passed time: {1}\n(seconds: {2})\nTotal time: {3}'.\
             format(self.events['label']['name'], delta, int(self.passed_seconds), total_delta)
-        api_url = self.events[self.target]['url'] + '/comments'
+        if self.target == 'pull_request':
+            api_url = self.events[self.target]['url'] + '/review_comments'
+        else:
+            api_url = self.events[self.target]['url'] + '/comments'
         payload = {'body': body}
         r = requests.post(api_url, headers=self.headers, data=json.dumps(payload))
         if r.status_code != 200:

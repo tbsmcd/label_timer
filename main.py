@@ -64,11 +64,7 @@ class Label:
             api_url = self.events[self.target]['url'] + '/comments'
         payload = {'body': body}
         r = requests.post(api_url, headers=self.headers, data=json.dumps(payload))
-        print(body)
-        print(api_url)
-        if r.status_code != 200:
-            print('Add comment: status code {}'.format(r.status_code))
-            print(r.json())
+        print('Add comment: status code {}'.format(r.status_code))
         return
 
     def set_outputs(self):
@@ -83,7 +79,7 @@ class Label:
         sum_seconds = 0
         reg = re.compile(r'Label {} passed time: .+\n\(seconds: ([0-9]+)\)'.format(self.events['label']['name']))
         if self.target == 'pull_request':
-            api_base_url = self.events[self.target]['review_comments_url']
+            api_base_url = self.events['pull_request']['_links']['comments']['href']
             comments = self.events[self.target]['review_comments']
         else:
             api_base_url = self.events[self.target]['comments_url']

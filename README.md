@@ -9,7 +9,7 @@ example.yml
 ```yaml
 name: Timer
 on:
-  ## If you want to target an issue label
+  # For pull request labels
   issues:
     types:
       ['labeled', 'unlabeled'].
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: test_run
-        uses: tbsmcd/label_timer@v2.1
+        uses: tbsmcd/label_timer@v2.2
         id: test_run
         with:
           # You can specify multiple labels separated by commas.

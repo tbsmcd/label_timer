@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: test_run
-        uses: tbsmcd/label_timer@v2.1
+        uses: tbsmcd/label_timer@v2.2
         id: test_run
         with:
           # ラベルはカンマ区切りで複数指定できます。

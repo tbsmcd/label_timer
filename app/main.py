@@ -114,8 +114,7 @@ def main():
             label.add()
         elif events['action'] == 'unlabeled':
             label.remove()
-            if environ.get('INPUT_COMMENT') == 'true':
-                label.comment()
+            label.comment()
         label.set_outputs()
 
 

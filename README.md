@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: test_run
-        uses: tbsmcd/label_timer@v2.0
+        uses: tbsmcd/label_timer@v2.1
         id: test_run
         with:
           # You can specify multiple labels separated by commas.

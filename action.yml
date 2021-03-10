@@ -7,7 +7,7 @@ branding:
 runs:
   using: 'docker'
 #  image: "Dockerfile"
-  image: 'docker://ghcr.io/tbsmcd/label_timer/labeler:v1.14'
+  image: 'docker://ghcr.io/tbsmcd/label_timer/labeler:v2.0'
 inputs:
   targets:
     description: 'Target labels, comma-separated.'
@@ -27,3 +27,5 @@ outputs:
     description: 'Passed seconds'
   sum_seconds:
     description: 'Passed seconds(total)'
+  url:
+    description: 'URL of Issue or Pull Request'

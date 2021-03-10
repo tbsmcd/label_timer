@@ -70,6 +70,11 @@ class Label:
     def set_outputs(self):
         print("::set-output name=action::{}".format(self.events['action']))
         print("::set-output name=label::{}".format(self.events['label']['name']))
+        if self.target == 'pull_request':
+            url = self.events['pull_request']['_links']['html']
+        else:
+            url = self.events[self.target]['url']
+        print("::set-output name=url::{}".format(url))
         if self.events['action'] == 'unlabeled':
             print("::set-output name=passed_seconds::{}".format(self.passed_seconds))
             print("::set-output name=sum_seconds::{}".format(self.passed_seconds + self.before_passed_seconds))

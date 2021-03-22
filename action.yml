@@ -6,7 +6,7 @@ branding:
   color: 'green'
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/tbsmcd/label_timer/labeler:v2.2'
+  image: 'docker://ghcr.io/tbsmcd/label_timer/labeler:v3.0'
 inputs:
   targets:
     description: 'Target labels, comma-separated.'
@@ -15,10 +15,6 @@ inputs:
     description: 'Github access token'
     required: true
 outputs:
-  action:
-    description: 'Triggered action'
-  label:
-    description: 'Target label'
   passed_seconds:
     description: 'Passed seconds'
   sum_seconds:

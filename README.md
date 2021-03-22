@@ -35,13 +35,11 @@ jobs:
       - name: add_time_label
         if: ${{ github.event.action == 'unlabeled' && github.event.label.name == 'responding' }}
         # outputs can be obtained as the following variables.
+        #
         # If `github.event.action == labeled`.
-        # ${{ steps.test_run.outputs.action }} labeled or unlabeled
-        # ${ steps.test_run.outputs.label }} labeled targeted
         # ${ steps.test_run.outputs.url }} URL of the issue or pull request that was targeted.
+        #
         # If `github.event.action == unlabeled`.
-        # ${{ steps.test_run.outputs.action }} labeled or unlabeled
-        # ${ steps.test_run.outputs.label }} labeled or unlabeled
         # ${ steps.test_run.outputs.url }} URL of the issue or pull request that was targeted
         # ${ steps.test_run.outputs.passed_seconds }} Number of seconds between label assignment and removal
         # ${ steps.test_run.outputs.sum_seconds }} Number of seconds between labeling and deletion (total)
@@ -58,7 +56,7 @@ When the target label is added, the measurement label will be added to the issue
 
 ## Get the result
 
-In the following steps and jobs, you can get `labeled or unlabeled`, the label name, the number of seconds between when the label was added and when it was removed, and the total time.
+In the following steps and jobs, you can get URL of issue/pull request, the number of seconds between when the label was added and when it was removed, and the total time.
 
 ## Usage example
 

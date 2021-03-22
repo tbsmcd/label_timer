@@ -33,13 +33,11 @@ jobs:
       - name: add_time_label
         if: ${{ github.event.action == 'unlabeled' && github.event.label.name == '対応中' }}
         # outputs は以下の変数として取得できます。
+        #
         # `github.event.action == labeled` の場合
-        # ${{ steps.test_run.outputs.action }} labeled or unlabeled
-        # ${{ steps.test_run.outputs.label }} 対象になったラベル
         # ${{ steps.test_run.outputs.url }} 対象になった Issue or Pull Request の URL
+        #
         # `github.event.action == unlabeled` の場合
-        # ${{ steps.test_run.outputs.action }} labeled or unlabeled
-        # ${{ steps.test_run.outputs.label }} 対象になったラベル
         # ${{ steps.test_run.outputs.url }} 対象になった Issue or Pull Request の URL
         # ${{ steps.test_run.outputs.passed_seconds }} ラベルが付与されてから削除されるまでの秒数
         # ${{ steps.test_run.outputs.sum_seconds }} ラベルが付与されてから削除されるまでの秒数（合計）
@@ -56,7 +54,7 @@ jobs:
 
 ## 結果の取得
 
-後の steps, jobs で `labeled or unlabeled`、ラベル名、ラベルが付与されてから削除されるまでの秒数、その合計が取得できます。
+後の steps, jobs でラベルが付与されてから削除されるまでの秒数、その合計、 Issue/Pull Request の URL が取得できます。
 
 ## 利用例
 

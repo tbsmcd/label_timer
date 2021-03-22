@@ -68,8 +68,6 @@ class Label:
         return
 
     def set_outputs(self):
-        print("::set-output name=action::{}".format(self.events['action']))
-        print("::set-output name=label::{}".format(self.events['label']['name']))
         if self.target == 'pull_request':
             url = self.events['pull_request']['_links']['html']['href']
         else:

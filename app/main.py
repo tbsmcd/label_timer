@@ -54,10 +54,10 @@ class Label:
     def comment(self):
         self.__set_before_passed_seconds()
         delta = re.sub(r'\.[0-9]*$', '', str(datetime.timedelta(seconds=self.passed_seconds)))
-        total_delta = re.sub(r'\.[0-9]*$', '',
-                             str(datetime.timedelta(seconds=self.before_passed_seconds + self.passed_seconds)))
-        body = 'Label {0} passed time: {1}\n(seconds: {2})\nTotal time: {3}'.\
-            format(self.events['label']['name'], delta, int(self.passed_seconds), total_delta)
+        total_passed_seconds = int(self.before_passed_seconds + self.passed_seconds)
+        total_delta = re.sub(r'\.[0-9]*$', '', str(datetime.timedelta(seconds=total_passed_seconds)))
+        body = 'Label {0} passed time: {1}\n(seconds: {2})\nTotal time: {3}\n(total seconds: {4})'.\
+            format(self.events['label']['name'], delta, int(self.passed_seconds), total_delta, total_passed_seconds)
         if self.target == 'pull_request':
             api_url = self.events['pull_request']['_links']['comments']['href']
         else:

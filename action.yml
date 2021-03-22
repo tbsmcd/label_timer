@@ -6,7 +6,7 @@ branding:
   color: 'green'
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/tbsmcd/label_timer/labeler:v3.0'
+  image: 'docker://ghcr.io/tbsmcd/label_timer/labeler:v3.1'
 inputs:
   targets:
     description: 'Target labels, comma-separated.'
